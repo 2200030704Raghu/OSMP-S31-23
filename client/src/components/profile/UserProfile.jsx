@@ -1,6 +1,6 @@
 import { useEffect, useState, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserAction, updateProfilePicAction } from "../../redux/actions/userActions";
+import { getUserAction } from "../../redux/actions/userActions";
 import PostOnProfile from "../post/PostOnProfile";
 import OwnProfileCard from "./OwnProfileCard";
 import CommonLoading from "../loader/CommonLoading";
@@ -10,7 +10,6 @@ import NoPost from "../../assets/nopost.jpg";
 const UserProfile = ({ userData }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [profilePic, setProfilePic] = useState(null); // State to store profile picture
   const user = useSelector((state) => state.user?.user);
   const posts = user?.posts;
 
@@ -30,17 +29,6 @@ const UserProfile = ({ userData }) => {
     <MemoizedPostOnProfile key={post._id} post={post} />
   ));
 
-  // Function to handle file upload
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    setProfilePic(file);
-  };
-
-  // Function to handle profile picture update
-  const handleProfilePicUpdate = () => {
-    dispatch(updateProfilePicAction(user._id, profilePic));
-  };
-
   return (
     <>
       {loading || !user || !posts ? (
@@ -51,16 +39,6 @@ const UserProfile = ({ userData }) => {
         <>
           <OwnProfileCard user={user} />
           <OwnInfoCard user={user} />
-
-          {/* Profile picture upload option */}
-          <div className="flex flex-col items-center mt-4">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileUpload}
-            />
-            <button onClick={handleProfilePicUpdate}>Upload Profile Picture</button>
-          </div>
 
           <h3 className="font-semibold text-center mb-4 text-gray-700 p-3 border-b">
             Your most recent posts
